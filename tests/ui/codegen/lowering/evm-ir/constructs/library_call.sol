@@ -1,7 +1,9 @@
-//@ revisions: unlinked linked
+//@ revisions: unlinked linked linked-colon
 //@[unlinked] compile-flags: -O none --emit=bin
 //@[linked] compile-flags: --libraries Lib=0x1111111111111111111111111111111111111111 -Zdump=evm-ir-runtime
 //@[linked] filecheck: --check-prefixes=COMMON,LINKED
+//@[linked-colon] compile-flags: --libraries Lib:0x1111111111111111111111111111111111111111 -Zdump=evm-ir-runtime
+//@[linked-colon] filecheck: --check-prefixes=COMMON,LINKED
 
 // A `public`/`external` library function called from another contract is
 // lowered to a DELEGATECALL.

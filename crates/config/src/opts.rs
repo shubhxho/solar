@@ -69,7 +69,7 @@ pub struct CompileOpts {
         )
     )]
     pub include_paths: Vec<PathBuf>,
-    /// Allow a given path for imports.
+    /// Accepted for solc compatibility. Imports are not restricted.
     #[cfg_attr(
         feature = "clap",
         arg(
@@ -108,7 +108,8 @@ pub struct CompileOpts {
     #[cfg_attr(feature = "clap", arg(long, value_enum, default_value_t))]
     pub revert_strings: RevertStrings,
 
-    /// Library addresses for linking, as `LibraryName=0xADDRESS`.
+    /// Library addresses for linking, as `LibraryName=0xADDRESS` or solc's
+    /// `LibraryName:0xADDRESS`.
     ///
     /// An optional `path.sol:` prefix restricts the address to that source. A
     /// `public`/`external` library function whose library has a linked address

@@ -238,7 +238,19 @@ impl Session {
         result = result.and(self.check_unique("emit", &self.opts.emit));
         result = result.and(self.validate_language());
         result = result.and(self.validate_base_path());
+        self.warn_ignored_allow_paths();
         result
+    }
+
+    /// `--allow-paths` is accepted for solc compatibility and does not restrict imports.
+    fn warn_ignored_allow_paths(&self) {
+        if self.opts.allow_paths.is_empty() {
+            return;
+        }
+        self.dcx
+            .warn("`--allow-paths` is ignored; imports are not restricted")
+            .help("this flag is accepted for solc compatibility only")
+            .emit();
     }
 
     fn validate_language(&self) -> crate::Result<()> {

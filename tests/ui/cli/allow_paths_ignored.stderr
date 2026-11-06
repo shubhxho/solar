@@ -1,0 +1,4 @@
+warning: `--allow-paths` is ignored; imports are not restricted
+   │
+   ╰ help: this flag is accepted for solc compatibility only
+

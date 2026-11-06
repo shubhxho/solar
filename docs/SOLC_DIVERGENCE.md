@@ -232,12 +232,14 @@ when several roots lead to the same path, as with a repeated include path.
 Different paths to one file, such as an include path and a symbolic link to it,
 are still ambiguous, as in `solc`. In Standard JSON mode, which does not access
 the file system, it does not check the base path. It does not restrict imports
-to allowed paths, so `--allow-paths` has no effect.
+to allowed paths, so `--allow-paths` has no effect; using the flag emits a
+warning.
 
 Rationale: these inputs have a single sensible meaning, and Standard JSON reads
 imports only through the read callback.
 
-Coverage: `include_paths_without_base_path` in `crates/solar/tests/it/paths.rs`.
+Coverage: `include_paths_without_base_path` in `crates/solar/tests/it/paths.rs`
+and `tests/ui/cli/allow_paths_ignored.sol`.
 
 ## Parsing
 

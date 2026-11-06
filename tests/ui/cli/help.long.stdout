@@ -52,7 +52,7 @@ Options:
           [possible values: default, strip, debug, verboseDebug]
 
       --libraries <NAME=ADDRESS>
-          Library addresses for linking, as `LibraryName=0xADDRESS`.
+          Library addresses for linking, as `LibraryName=0xADDRESS` or solc's `LibraryName:0xADDRESS`.
           
           An optional `path.sol:` prefix restricts the address to that source. A `public`/`external` library function whose library has a linked address is called through `DELEGATECALL` at that address instead of being inlined into the caller.
 
@@ -90,7 +90,7 @@ Input options:
           Can be used multiple times.
 
       --allow-paths <ALLOW_PATHS>
-          Allow a given path for imports
+          Accepted for solc compatibility. Imports are not restricted
 
 Display options:
       --color <COLOR>

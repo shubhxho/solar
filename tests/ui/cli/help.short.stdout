@@ -23,7 +23,7 @@ Options:
       --revert-strings <REVERT_STRINGS>
           Strip revert (and require) reason strings or add additional debugging information [default: default] [possible values: default, strip, debug, verboseDebug]
       --libraries <NAME=ADDRESS>
-          Library addresses for linking, as `LibraryName=0xADDRESS`
+          Library addresses for linking, as `LibraryName=0xADDRESS` or solc's `LibraryName:0xADDRESS`
       --out-dir <OUT_DIR>
           Directory to write output files
       --emit <EMIT>
@@ -40,7 +40,7 @@ Options:
 Input options:
       --base-path <BASE_PATH>        Use the given path as the root of the source tree
   -I, --include-path <INCLUDE_PATH>  Directory to search for files
-      --allow-paths <ALLOW_PATHS>    Allow a given path for imports
+      --allow-paths <ALLOW_PATHS>    Accepted for solc compatibility. Imports are not restricted
 
 Display options:
       --color <COLOR>                Coloring [default: auto] [possible values: auto, always, never]

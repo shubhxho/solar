@@ -509,7 +509,8 @@ impl fmt::Debug for ImportRemapping {
     }
 }
 
-/// A single library address for linking: `[path.sol:]Name=0xADDRESS`.
+/// A single library address for linking: `[path.sol:]Name=0xADDRESS` or solc's
+/// `[path.sol:]Name:0xADDRESS`.
 #[derive(Clone, PartialEq, Eq)]
 pub struct LibraryAddress {
     /// The source path, or `None` when the address applies to any source.
@@ -524,9 +525,7 @@ impl std::str::FromStr for LibraryAddress {
     type Err = &'static str;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let Some((name, addr)) = s.split_once('=') else {
-            return Err("missing '='");
-        };
+        let (name, addr) = split_library_name_and_address(s.trim())?;
         let name = name.trim();
         let (source, name) = if let Some((source, name)) = name.rsplit_once(':') {
             (Some(source.trim()), name.trim())
@@ -547,6 +546,20 @@ impl std::str::FromStr for LibraryAddress {
             address,
         })
     }
+}
+
+/// Splits `[path:]Name=0xADDRESS` or solc's `[path:]Name:0xADDRESS`.
+fn split_library_name_and_address(s: &str) -> Result<(&str, &str), &'static str> {
+    if let Some((name, addr)) = s.split_once('=') {
+        return Ok((name, addr));
+    }
+    // solc `--libraries File.sol:Math:0x1234...` and `Math:0x1234...`.
+    if let Some((name, addr)) = s.rsplit_once(':')
+        && addr.trim().starts_with("0x")
+    {
+        return Ok((name, addr));
+    }
+    Err("expected `Name=0xADDRESS` or `Name:0xADDRESS`")
 }
 
 impl fmt::Display for LibraryAddress {
@@ -668,6 +681,30 @@ mod tests {
                 assert_eq!(serde_json::to_string(&value).unwrap(), json_s);
                 assert_eq!(serde_json::from_str::<EvmVersion>(&json_s).unwrap(), value);
             }
+        }
+    }
+
+    #[test]
+    fn library_address_accepts_equals_and_solc_colons() {
+        let addr = "0x1111111111111111111111111111111111111111";
+        for spec in [
+            "Math=0x1111111111111111111111111111111111111111",
+            "Math:0x1111111111111111111111111111111111111111",
+            "File.sol:Math=0x1111111111111111111111111111111111111111",
+            "File.sol:Math:0x1111111111111111111111111111111111111111",
+        ] {
+            let parsed: LibraryAddress = spec.parse().unwrap();
+            assert_eq!(parsed.name, "Math", "{spec}");
+            assert_eq!(format!("{:#x}", parsed.address), addr, "{spec}");
+            let source = spec.contains("File.sol").then_some("File.sol");
+            assert_eq!(parsed.source.as_deref(), source, "{spec}");
+        }
+    }
+
+    #[test]
+    fn library_address_rejects_a_missing_address() {
+        for spec in ["Math", "File.sol:Math", "Math:not-an-address"] {
+            assert!(spec.parse::<LibraryAddress>().is_err(), "{spec}");
         }
     }
 }
