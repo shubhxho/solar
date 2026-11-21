@@ -9,8 +9,8 @@ contract C {
     // Immutable with non-value type (struct)
     S immutable IMMUT_STRUCT; //~ ERROR: immutable variables cannot have a non-value type
 
-    // Immutable with external function type
-    function(uint) external immutable IMMUT_EXT_FN; //~ ERROR: immutable variables of external function type are not yet supported
+    // Valid immutable with external function type
+    function(uint) external immutable VALID_IMMUT_EXT_FN;
 
     // Struct containing mapping
     struct WithMapping {
