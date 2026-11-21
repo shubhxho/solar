@@ -10,12 +10,6 @@ error[6377]: immutable variables cannot have a non-value type
 LL │     S immutable IMMUT_STRUCT;
    ╰╴    ━━━━━━━━━━━━━━━━━━━━━━━━
 
-error: immutable variables of external function type are not yet supported
-   ╭▸ ROOT/tests/ui/typeck/variables/var_decl_rules.sol:LL:CC
-   │
-LL │     function(uint) external immutable IMMUT_EXT_FN;
-   ╰╴    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 error[6377]: immutable variables cannot have a non-value type
    ╭▸ ROOT/tests/ui/typeck/variables/var_decl_rules.sol:LL:CC
    │
@@ -86,5 +80,5 @@ LL │         mapping(uint => uint) storage s;
    │
    ╰ note: mappings cannot be created dynamically, you have to assign them from a state variable
 
-error: aborting due to 14 previous errors
+error: aborting due to 13 previous errors
 
